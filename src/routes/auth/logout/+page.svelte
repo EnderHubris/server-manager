@@ -1,0 +1,1 @@
+<p>You will be logged out shortly!</p>

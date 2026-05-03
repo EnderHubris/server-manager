@@ -1,0 +1,171 @@
+html,
+body {
+    min-height: 100%;
+    margin: 0;
+    background-color: #1f1f24 !important;
+}
+
+#login-panel {
+    background-color: #00000000 !important;
+}
+
+html {
+    background: linear-gradient(
+        -45deg,
+        #0f172a,
+        #1e293b,
+        #334155,
+        #475569
+    );
+    background-size: 400% 400%;
+    animation: pageGradient 16s ease infinite;
+}
+
+body,
+main {
+    background: transparent;
+}
+
+main {
+    position: relative;
+    z-index: 2;
+    color: #3d7bb9; /* default readable text */
+}
+
+/* Add dark readable overlay behind content */
+main::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.205);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Titles become bright */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.display-1,
+.display-2,
+.display-3,
+.display-4,
+.display-5,
+.display-6 {
+    color: #ffffff;
+}
+
+/* Paragraphs / muted text */
+p,
+.lead,
+small,
+span,
+li {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+/* Cards / sections */
+.float-card,
+.card,
+section .bg-dark,
+section .bg-opacity-25 {
+    backdrop-filter: blur(12px);
+}
+
+.float-card .col-6 .rounded {
+    border: rgb(44, 42, 51);
+    border-style: solid;
+}
+
+/* soft floating glow circles */
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.22;
+    z-index: 1;
+    pointer-events: none;
+}
+
+body::before {
+    top: -120px;
+    left: -100px;
+    background: #3b82f6;
+    animation: floatOrbOne 14s ease-in-out infinite;
+}
+
+body::after {
+    right: -120px;
+    bottom: -120px;
+    background: #8b5cf6;
+    animation: floatOrbTwo 18s ease-in-out infinite;
+}
+
+/* logo remains visible */
+#site-logo {
+    width: 256px;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    padding: 14px;
+    border-radius: 24px;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.18),
+        rgba(255,255,255,0.05)
+    );
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.35),
+        0 0 25px rgba(99,102,241,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+    backdrop-filter: blur(14px);
+    transition: 0.35s ease;
+    animation: logoFloat 4s ease-in-out infinite;
+}
+
+#site-logo:hover {
+    transform: translateY(-8px) scale(1.04);
+}
+
+#user-display {
+    border-radius: 15px;
+    border-style: solid;
+    border-color: #234474;
+    background-color: #2c4f7c;
+
+    padding-left: 15px;
+    padding-right: 15px;
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* animations */
+@keyframes pageGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes floatOrbOne {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(90px,70px) scale(1.15); }
+}
+
+@keyframes floatOrbTwo {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(-80px,-60px) scale(1.1); }
+}
+
+@keyframes logoFloat {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
