@@ -1,4 +1,4 @@
-import { redirect, fail } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 import { db } from '$lib/database/db';
 import { sessions, users } from '$lib/database/app-schema';

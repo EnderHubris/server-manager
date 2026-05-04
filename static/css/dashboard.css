@@ -75,7 +75,7 @@
     color: #fff;
 }
 
-.server-listing {
+.dashboard-main {
     display: block;
     width: 100%;
     max-width: 90vw;
@@ -84,7 +84,7 @@
     transition: max-width 0.35s ease, padding 0.35s ease, opacity 0.35s ease;
 }
 
-.server-listing.collapsed {
+.dashboard-main.collapsed {
     max-width: 0;
     padding: 0;
     opacity: 0;
@@ -115,4 +115,72 @@
     border-style: solid;
     border-color: rgb(33, 126, 45);
     background-color: rgb(39, 231, 55);
+}
+
+
+.operator-table {
+    background-color: #1a1a1a60;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+.operator-table thead {
+    background-color: #1111114f;
+}
+.operator-table thead th {
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.operator-table tbody tr {
+    transition: background 0.15s ease;
+}
+.operator-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+}
+.operator-table tbody tr + tr {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.operator-table td {
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+    padding: 13px 16px;
+    font-size: 14px;
+}
+
+
+.collapse-wrapper {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+}
+.collapse-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.1rem;
+    background: #1a1a1a70;
+    border: none;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.collapse-toggle:hover {
+    background: #22222242;
+    color: #fff;
+}
+.collapse-body {
+    padding: 1rem 1.1rem;
+    background: #11111163;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }

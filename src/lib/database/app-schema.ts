@@ -10,7 +10,7 @@ export const users = mysqlTable("users", {
   password:  varchar("password", { length: 256 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()).notNull(),
-  role:      varchar("role", { length: 12 }).default("user")
+  role:      varchar("role", { length: 12 }).default("user").notNull()
 });
 
 export const sessions = mysqlTable("sessions", {
