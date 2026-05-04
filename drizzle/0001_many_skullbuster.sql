@@ -23,3 +23,13 @@ CREATE TABLE `sessions` (
 	CONSTRAINT `sessions_id` PRIMARY KEY(`id`)
 );
 ALTER TABLE `sessions` ADD CONSTRAINT `sessions_uid_users_id_fk` FOREIGN KEY (`uid`) REFERENCES `users`(`id`) ON DELETE cascade ON UPDATE no action;
+
+CREATE TABLE `instances` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`name` varchar(24) NOT NULL,
+	`desc` text NOT NULL DEFAULT (''),
+	`icon` varchar(64) NOT NULL DEFAULT '',
+	`created_at` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `instances_id` PRIMARY KEY(`id`),
+	CONSTRAINT `instances_name_unique` UNIQUE(`name`)
+);

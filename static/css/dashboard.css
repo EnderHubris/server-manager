@@ -1,0 +1,118 @@
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0;
+  position: absolute; /* Stay in place and is not effected by scrolling */
+  z-index: 1; /* Stay on top layer */
+  left: 0;
+  background-color: #353c5247;
+  overflow-x: visible;
+  padding-top: 20px;
+
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.sidenav-inner {
+  overflow-x: hidden;
+}
+
+.sidenav-tab {
+    position: absolute;
+    top: 35px;
+    right: -125px;
+    transform-origin: center;
+    border-radius: 6px 6px 0 0;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 150px; /* open state */
+    transition: max-width 0.35s ease, padding 0.35s ease;
+}
+
+.sidenav-tab.collapsed {
+    max-width: 0;
+    padding: 0;
+}
+
+.sidenav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidenav-title {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    margin: 10px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+}
+
+.sidenav-divider {
+    border-color: rgba(255,255,255,0.08);
+    margin: 1rem 0;
+}
+
+.close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 10px;
+    width: 36px; height: 36px;
+
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.close-btn:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.3);
+    color: #fff;
+}
+
+.server-listing {
+    display: block;
+    width: 100%;
+    max-width: 90vw;
+    margin: 0 auto;
+    padding: 1.5rem;
+    transition: max-width 0.35s ease, padding 0.35s ease, opacity 0.35s ease;
+}
+
+.server-listing.collapsed {
+    max-width: 0;
+    padding: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.listing-panel-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.server-card {
+    background-color: #51627a52 !important;
+    color: aliceblue !important;
+}
+.server-card-text {
+    color: rgba(255, 255, 255, 0.575) !important;
+}
+
+.btn-green {
+    text-decoration: none;
+    font-weight: 600;
+    color:#1f1f1f;
+    
+    border-radius: 15px;
+    border-style: solid;
+    border-color: rgb(33, 126, 45);
+    background-color: rgb(39, 231, 55);
+}

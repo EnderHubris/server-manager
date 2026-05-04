@@ -1,5 +1,6 @@
 import {
-    mysqlTable, int, varchar, timestamp
+    mysqlTable, int, varchar, timestamp,
+    text
 } from "drizzle-orm/mysql-core";
 import { randomBytes } from "crypto";
 
@@ -23,4 +24,12 @@ export const sessions = mysqlTable("sessions", {
   ip:        varchar("ip", { length: 18 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   expiresAt: timestamp("expires_at").notNull(),
+});
+
+export const instances = mysqlTable("instances", {
+  id:           int('id').primaryKey().autoincrement(),
+  name:         varchar("name", { length: 24 }).notNull().unique(),
+  description:  text("desc").notNull().default(""),
+  icon:         varchar('icon', { length: 64 }).notNull().default(""),
+  createdAt:    timestamp("created_at").defaultNow().notNull(),
 });

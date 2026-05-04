@@ -15,6 +15,13 @@
       "when": 1777831426507,
       "tag": "0001_many_skullbuster",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1777855945701,
+      "tag": "0002_magical_iron_patriot",
+      "breakpoints": true
     }
   ]
 }
