@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '$lib/database/db';
 
 import { users,instances } from '$lib/database/app-schema';
-import { IsAuthenticated } from '$lib/database/auth.js';
+import { IsAuthenticated } from '$lib/database/auth';
 
 import { json } from '@sveltejs/kit';
 

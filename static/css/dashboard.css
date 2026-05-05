@@ -184,3 +184,24 @@
     background: #11111163;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
+
+
+.conf-about {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #99999950;
+    
+    border-radius: 15px;
+    border-color: #a5a5a5;
+    border-style: solid;
+
+    margin-left: 300px;
+    margin-right: 300px;
+    margin-bottom: 15px;
+}
+.conf-about p {
+    max-width: 500px;
+    margin: 10px;
+}
