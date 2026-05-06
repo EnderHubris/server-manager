@@ -305,6 +305,7 @@
                                 name="role"
                                 class="form-select form-select-lg rounded-3"
                                 style="margin-bottom: 45px;"
+                                required
                             >
                                 <option value="" disabled selected>Choose a role</option>
                                 <option value="user">User</option>

@@ -5,6 +5,8 @@ import { users,instances } from '$lib/database/app-schema';
 import { IsAuthenticated } from '$lib/database/auth';
 
 import { json } from '@sveltejs/kit';
+import fs from 'fs/promises';
+import { join } from 'path';
 
 async function deleteUser(username: string) : Promise<Response> {
     console.log(`[DELETION] Attempting to remove ${username}`);
@@ -20,6 +22,32 @@ async function deleteUser(username: string) : Promise<Response> {
 
         console.log(`[DELETION] Removed ${username}`);
         return json({ success: true, message: `${username} removed successfully!` , status: 200 });
+    } catch (e) {
+        return json({ success: false, error: 'Error Occurred' , status: 500 });
+    }
+}
+
+async function deleteServer(name: string) : Promise<Response> {
+    console.log(`[DELETION] Attempting to remove server: ${name}`);
+    try {
+        // remove icon file
+        const [data] = await db.select({ icon: instances.icon })
+                    .from(instances)
+                    .where(eq(instances.name, name)).limit(1);
+
+        if (data.icon.length > 0) {
+            const abs_path = join(process.cwd(), data.icon);
+            await fs.rm(abs_path);
+        }
+
+        // remove entry
+        const result = await db.delete(instances)
+                    .where(eq(instances.name, name)).limit(1);
+        if (!result.length)
+            return json({ success: false, error: `${name} does not exist` , status: 200 });
+
+        console.log(`[DELETION] Removed server: ${name}`);
+        return json({ success: true, message: `${name} removed successfully!` , status: 200 });
     } catch (e) {
         return json({ success: false, error: 'Error Occurred' , status: 500 });
     }
@@ -57,7 +85,8 @@ export const POST = async ( event ) => {
         // { action: 'delete-server', server_name }
         if (!data.server_name)
             return json({ success: false, error: 'Invalid Data' , status: 400 });
-        return json({ success: true, warning: 'Action under Developmenet' , status: 200 });
+
+        return await deleteServer(data.server_name);
     }
 
     return json({ success: false, error: 'Error Occurred' , status: 500 });

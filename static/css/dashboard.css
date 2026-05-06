@@ -184,6 +184,9 @@
     background: #11111163;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
+.collapse-toggle.green span {
+    color:rgb(41, 197, 62);
+}
 
 
 .conf-about {

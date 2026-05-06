@@ -1,8 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 
+import { eq } from 'drizzle-orm';
 import { db } from '$lib/database/db';
 import { sessions, users } from '$lib/database/app-schema';
-import { eq } from 'drizzle-orm';
 
 import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
