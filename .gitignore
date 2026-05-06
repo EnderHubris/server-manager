@@ -24,4 +24,5 @@ vite.config.ts.timestamp-*
 
 # Custom
 .vscode/
-uploads/
+/uploads/
+/local_storage/
