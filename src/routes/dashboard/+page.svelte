@@ -3,7 +3,12 @@
     import logo from '$lib/assets/mine_manager.png';
 
     import ServerForm from '$lib/components/server_form.svelte';
-    let open = $state(false);
+    let showCreateForm = $state(false);
+
+    import { slide } from 'svelte/transition';
+    import UpdateForm from '$lib/components/update_form.svelte';
+    let showUpdateForm = $state(false);
+    let selectedServer = $state("");
 
     const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
         year: 'numeric', month: 'short', day: 'numeric'
@@ -27,8 +32,8 @@
         const tooBig = picked.filter(f => f.size > MAX_FILE_SIZE);
         if (tooBig.length > 0) {
             error = `Files exceed 12 MB limit: ${tooBig.map(f => f.name).join(", ")}`;
-            if (iconInput) {
-                iconInput.value = "";
+            if (input) {
+                input.value = "";
             }
             return;
         }
@@ -102,8 +107,20 @@
     {/if}
 </div>
 
+{#if showUpdateForm}
+    <div transition:slide={{ duration: 350 }} >
+        <UpdateForm
+            onClose={() => { showUpdateForm = false; }}
+            server_name={selectedServer}
+        />
+    </div>
+{/if}
+
 <div class="collapse-wrapper">
-    <button class="collapse-toggle green" onclick={() => open = !open}>
+    <button class="collapse-toggle green" onclick={() => {
+        showCreateForm = !showCreateForm;
+        if (showUpdateForm) showUpdateForm = false;
+    }}>
         <span>Create Server</span>
         <svg
             width="16" height="16"
@@ -112,14 +129,17 @@
             stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
-            style="transform: rotate({open ? 180 : 0}deg); transition: transform 0.3s ease;"
+            style="transform: rotate({showCreateForm ? 180 : 0}deg); transition: transform 0.3s ease;"
         >
             <polyline points="4 6 8 10 12 6"/>
         </svg>
     </button>
 
-    {#if open}
-        <div class="collapse-wrapper">
+    {#if showCreateForm}
+        <div
+            transition:slide={{ duration: 350 }}
+            class="collapse-wrapper"
+        >
             <ServerForm
                 handleIconInput={handleIconInput}
                 onSuccess={(msg) => { success = msg; setTimeout(clearResult, 5000); invalidateAll(); }}
@@ -146,8 +166,18 @@
                 </div>
 
                 <div class="card-footer bg-transparent">
-                    <button class="btn btn-outline-primary btn-sm">Update</button>
-                    <button onclick={ () => { removeServer(server.name) } } class="btn btn-outline-danger btn-sm">Delete</button>
+                    <button
+                        onclick={ () => {
+                            selectedServer = server.name;
+                            showCreateForm = false;
+                            showUpdateForm = true;
+                        } }
+                        class="btn btn-outline-primary btn-sm"
+                    >Update</button>
+                    <button
+                        onclick={ () => { removeServer(server.name) } }
+                        class="btn btn-outline-danger btn-sm"
+                    >Delete</button>
                 </div>
             </div>
         </div>

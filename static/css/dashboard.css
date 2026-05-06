@@ -208,3 +208,30 @@
     max-width: 500px;
     margin: 10px;
 }
+
+
+.update_overlay {
+    background-color: #45527a50;
+    
+    border-radius: 15px;
+    border-color: #6a7c91;
+    border-style: solid;
+
+    margin: 15px;
+}
+.update_overlay.content {
+    border-style: none;
+    border-radius: 0;
+
+    border-radius: 15px;
+    border-color: #7891cb;
+    border-style: solid;
+
+    padding: 15px;
+
+    align-items: center;
+    justify-content: center;
+}
+.update_overlay.content label {
+    color: #bbc1c9;
+}

@@ -8,7 +8,13 @@ export const defaultConfig: ConfigData = {
     "server_root":`${process.cwd()}/servers`
 };
 
-async function fileExists(path: string): Promise<boolean> {
+/**
+ * returns whether or not a file exists on disk
+ * 
+ * @param path 
+ * @returns 
+ */
+export async function fileExists(path: string): Promise<boolean> {
     try {
         await fs.access(path, fs.constants.F_OK);
         return true;
