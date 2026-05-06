@@ -1,37 +1,14 @@
 import { IsAuthenticated } from '$lib/database/auth';
 import { redirect } from '@sveltejs/kit';
 
-import { writeFile, mkdir } from "fs/promises";
-import { join, extname } from 'path';
-import { createHash } from 'crypto';
-
 import { db } from '$lib/database/db';
 import { instances } from '$lib/database/app-schema.js';
+
+import { UploadIcon } from '$lib/operations/upload_file.js';
 
 export const load = () => {
     throw redirect(303, '/dashboard');
 };
-
-async function UploadIcon(file: File): Promise<string> {
-    try {
-        const uploadDir = join(process.cwd(), "uploads");
-    
-        console.log(`[*] Saving Icon to: ${uploadDir}`);
-        await mkdir(uploadDir, { recursive: true });
-    
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const hash = createHash('sha256').update(buffer).digest('hex');
-        const ext = extname(file.name);
-        const hashedName = `${hash.slice(0,8)}${ext}`;
-    
-        const iconPath = join(uploadDir, hashedName);
-        await writeFile(iconPath, buffer);
-        return join("uploads", hashedName);
-    } catch (e) {
-        console.error(`[-] Upload Error: ${e}`);
-        return "";
-    }
-}
 
 export const actions = {
     // special form named-target

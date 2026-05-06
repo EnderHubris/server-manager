@@ -89,6 +89,91 @@
         }
     }
 
+    let iconInput = $state<HTMLInputElement | null>(null);
+    async function handleIconChange(e: Event, server_name: string) {
+        const input = e.target as HTMLInputElement;
+        const file = input.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('action', 'change-icon');
+        formData.append('server_name', server_name);
+        formData.append('icon', file);
+
+        const req = await fetch('/dashboard', {
+            method: 'POST',
+            body: formData
+        });
+
+        const response = await req.json();
+        if (response) {
+            console.log(response);
+
+            if (response.success) {
+                if (!response.warning)
+                    success = response.message;
+                else
+                    warning = response.warning;
+            } else {
+                error = response.error;
+            }
+        } else {
+           error = "Error Occurred";
+        }
+
+        await invalidateAll();
+        setTimeout(clearResult, 5000);
+    }
+
+    async function handleServer(name: string, status: boolean) {
+        const req = await fetch('/dashboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'toggle-server', server_name: name, o_status: status })
+        });
+
+        const response = await req.json();
+        if (response) {
+            console.log(response);
+
+            if (response.success) {
+                if (!response.warning)
+                    success = response.message;
+                else
+                    warning = response.warning;
+            } else {
+                error = response.error;
+            }
+        } else {
+           error = "Error Occurred";
+        }
+
+        await invalidateAll();
+        setTimeout(clearResult, 5000);
+    }
+
+    let editingDesc = $state("");
+    let editDescValue = $state("");
+
+    async function saveDesc(server_name: string) {
+        const req = await fetch('/dashboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'update-desc', server_name, description: editDescValue })
+        });
+
+        const response = await req.json();
+        if (response.success) {
+            success = response.message;
+        } else {
+            error = response.error;
+        }
+
+        editingDesc = "";
+        await invalidateAll();
+        setTimeout(clearResult, 5000);
+    }
+
     const { data } = $props();
 </script>
 
@@ -154,15 +239,81 @@
     {#each data.servers as server}
         <div class="col">
             <div class="server-card card h-100">
-                <img src={ server.icon.length === 0 ? logo : server.icon } class="card-img-top" alt="Server Icon" />
+                {#if server.online}
+                    <button
+                        onclick={ () => { handleServer(server.name, false) } }
+                        class="btn btn-danger btn-sm"
+                        style="margin: 15px"
+                    >Shutdown</button>
+                {:else}
+                    <button
+                        onclick={ () => { handleServer(server.name, true) } }
+                        class="btn btn-success btn-sm"
+                        style="margin: 15px"
+                    >Start Up</button>
+                {/if}
+
+                <div class="card-img-wrapper">
+                    <img
+                        src={ server.icon.length === 0 ? logo : server.icon }
+                        class="card-img-top"
+                        alt="Server Icon"
+                        style="height: 300px"
+                    />
+                    
+                    <input
+                        type="file"
+                        accept="image/png, image/jpeg, image/gif"
+                        class="d-none"
+                        bind:this={iconInput}
+                        onchange={
+                            (e) => handleIconChange(e, server.name)
+                        }
+                    />
+
+                    <button class="icon-edit-btn" onclick={() => { iconInput?.click() }} aria-label="Change icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </button>
+                </div>
+
                 <div class="card-body">
                     <h5 class="card-title">{server.name}</h5>
-                    <p class="server-card-text card-text">
-                        {server.description}
-                    </p>
-                    <span>
-                        {formatDate(server.createdAt)}
-                    </span>
+
+                    {#if editingDesc === server.name}
+                        <textarea
+                            class="form-control mb-2"
+                            rows="3"
+                            bind:value={editDescValue}
+                        ></textarea>
+                        <div class="d-flex gap-2 mb-2">
+                            <button class="btn btn-primary btn-sm" onclick={() => saveDesc(server.name)}>Save</button>
+                            <button class="btn btn-secondary btn-sm" onclick={() => editingDesc = ""}>Cancel</button>
+                        </div>
+                    {:else}
+                        <div class="server-info">
+                            <button
+                                aria-label="Change Description"
+                                style="margin-right: 10px;"
+                                onclick={() => {
+                                    editingDesc = server.name;
+                                    editDescValue = server.description;
+                                }}
+                            >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <p class="server-card-text card-text">
+                                {server.description}
+                            </p>
+                        </div>
+                    {/if}
+
+                    <span>{formatDate(server.createdAt)}</span>
                 </div>
 
                 <div class="card-footer bg-transparent">

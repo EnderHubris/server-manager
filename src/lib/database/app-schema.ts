@@ -1,6 +1,6 @@
 import {
     mysqlTable, int, varchar, timestamp,
-    text
+    text, boolean
 } from "drizzle-orm/mysql-core";
 import { randomBytes } from "crypto";
 
@@ -29,7 +29,8 @@ export const sessions = mysqlTable("sessions", {
 export const instances = mysqlTable("instances", {
   id:           int('id').primaryKey().autoincrement(),
   name:         varchar("name", { length: 24 }).notNull().unique(),
-  description:  text("desc").notNull().default(""),
+  description:  text("description").notNull().default(""),
   icon:         varchar('icon', { length: 64 }).notNull().default(""),
+  online:       boolean('online').default(true).notNull(),
   createdAt:    timestamp("created_at").defaultNow().notNull(),
 });

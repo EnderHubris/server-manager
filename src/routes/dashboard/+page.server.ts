@@ -24,6 +24,7 @@ export const load = async ({ cookies }) => {
             name:           instances.name,
             description:    instances.description,
             icon:           instances.icon,
+            online:         instances.online,
             createdAt:      instances.createdAt,
         }).from(instances);
 

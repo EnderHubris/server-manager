@@ -189,6 +189,37 @@
 }
 
 
+.card-img-wrapper {
+    position: relative;
+}
+
+.icon-edit-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s;
+}
+
+.icon-edit-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+
 .conf-about {
     display: flex;
     align-items: center;
@@ -234,4 +265,29 @@
 }
 .update_overlay.content label {
     color: #bbc1c9;
+}
+
+
+
+.server-info {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+.server-info button {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s;
+}
+.server-info button:hover {
+    background: rgba(0, 0, 0, 0.8);
 }

@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1777784063007,
-      "tag": "0000_broken_blue_marvel",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1777831426507,
-      "tag": "0001_many_skullbuster",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1777855945701,
-      "tag": "0002_magical_iron_patriot",
+      "when": 1778097572600,
+      "tag": "0000_dashing_power_pack",
       "breakpoints": true
     }
   ]
