@@ -24,6 +24,8 @@
 		"vite": "^8.0.7"
 	},
 	"dependencies": {
+		"@sveltejs/adapter-node": "^5.5.4",
+		"@types/dockerode": "^4.0.1",
 		"bcryptjs": "^3.0.3",
 		"bootstrap": "^5.3.8",
 		"drizzle-orm": "^0.45.2",

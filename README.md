@@ -10,6 +10,11 @@ The default credential is `admin:admin`, if you plan to allow access to this int
 over public internet, it is `EXTREMELY` recommended that you change the default password
 to a secure and strong passphrase avoid incidents.
 
+## Running Application
+```console
+DB_USER_PASSWORD='' DB_USER='' docker compose -p server_manager up --build -d
+```
+
 ## Developer Section
 Managing [Drizzle ORM](https://orm.drizzle.team/docs/kit-overview)
 ```ts

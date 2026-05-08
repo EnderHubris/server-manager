@@ -1,0 +1,65 @@
+services:
+  
+  # db is configured to unallow certain dangerous actions
+  # for safety, root passwd is randomized during initial creation
+  db:
+    image: mysql:8
+    container_name: manager_db
+    expose: # do not open port(s) on HOST
+      - "3306"
+    restart: always
+    command: >
+      --local-infile=0
+      --secure-file-priv=""
+      --skip-symbolic-links
+      --skip-show-database
+      --sql-mode="STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION"
+    environment:
+      MYSQL_ROOT_PASSWORD: not_permenent123
+      MYSQL_DATABASE: management
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_USER_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./drizzle/0000_dashing_power_pack.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./prep_db.sh:/docker-entrypoint-initdb.d/init.sh
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER}", "-p${DB_USER_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_internal
+
+  app:
+    restart: unless-stopped
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_USER_PASSWORD}
+      - DB_DATABASE=management
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: manager_app
+    ports:
+      - "80:80" # host:container
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./local_storage:/app/local_storage
+      - ./runner.sh:/runner.sh
+      - ./uploads:/var/www/project/uploads
+    networks:
+      - app_internal
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  uploads:
+  local_storage:
+
+networks:
+  app_internal:
