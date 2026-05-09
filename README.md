@@ -11,8 +11,14 @@ over public internet, it is `EXTREMELY` recommended that you change the default 
 to a secure and strong passphrase avoid incidents.
 
 ## Running Application
+For this application to work add your user to the `docker` and `www-data` group.
 ```console
-DB_USER_PASSWORD='' DB_USER='' docker compose -p server_manager up --build -d
+sudo usermod -aG docker USER
+sudo usermod -aG www-data USER
+```
+Starting the app container, always use strong credentials.
+```console
+HOST_VOL="$(pwd)/local_storage" DB_USER_PASSWORD='' DB_USER='' docker compose -p server_manager up --build -d
 ```
 
 ## Developer Section

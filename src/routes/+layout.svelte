@@ -44,6 +44,11 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- feedback if local db is unreachable : avoid ec 500 -->
+    {#if data.error }
+        <div class="alert alert-danger">{data.error}</div>
+    {/if}
+
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
         <li class="nav-item ms-lg-3 mt-3 mt-lg-0">

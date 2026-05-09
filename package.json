@@ -15,6 +15,7 @@
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/kit": "^2.57.0",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
+		"@types/dockerode": "^4.0.1",
 		"@types/tar": "^6.1.13",
 		"@types/unzipper": "^0.10.11",
 		"drizzle-kit": "^0.31.10",
@@ -25,9 +26,9 @@
 	},
 	"dependencies": {
 		"@sveltejs/adapter-node": "^5.5.4",
-		"@types/dockerode": "^4.0.1",
 		"bcryptjs": "^3.0.3",
 		"bootstrap": "^5.3.8",
+		"dockerode": "^5.0.0",
 		"drizzle-orm": "^0.45.2",
 		"mysql2": "^3.22.3",
 		"node-cron": "^4.2.1",

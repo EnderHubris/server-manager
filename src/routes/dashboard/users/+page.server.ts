@@ -115,7 +115,7 @@ export const actions = {
             return { success: true, message: `${username} added!` }
         } catch (e) {
             console.error(`[ERROR] -- ${e}`);
-            return { success: false, message: 'An error occurred' };
+            return { success: false, error: 'An error occurred' };
         }
     },
 };

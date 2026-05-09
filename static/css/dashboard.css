@@ -291,3 +291,26 @@
 .server-info button:hover {
     background: rgba(0, 0, 0, 0.8);
 }
+
+
+.loading-state {
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.loading-label {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.712);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1;   }
+}

@@ -2,6 +2,7 @@
     import { enhance } from '$app/forms';
 
     let server_name = $state("");
+    let server_port = $state("19132");
     let server_description = $state("");
     let loading = $state<boolean>(false);
 
@@ -57,6 +58,24 @@
                 class="form-control form-control-lg rounded-3"
                 placeholder="Name of Server"
                 bind:value={server_name}
+                required
+            />
+
+            <label for="server_port"
+                class="form-label fw-semibold"
+                style="margin-top: 5px;"
+            >Server Port</label>
+            <input
+                id="server_port"
+                name="server_port"
+                type="number"
+                min="1"
+                max="65535"
+                step="1"
+                class="form-control form-control-lg rounded-3"
+                style="margin-bottom: 40px;"
+                placeholder="Server Port"
+                bind:value={server_port}
                 required
             />
         </div>

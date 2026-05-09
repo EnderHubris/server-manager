@@ -2,6 +2,9 @@
     import { invalidateAll } from '$app/navigation';
     import logo from '$lib/assets/mine_manager.png';
 
+    import LoadDial from '$lib/components/dial.svelte';
+    let toggleTarget = $state<string|undefined>(undefined);
+
     import ServerForm from '$lib/components/server_form.svelte';
     let showCreateForm = $state(false);
 
@@ -125,7 +128,12 @@
         setTimeout(clearResult, 5000);
     }
 
+    /**
+     * Toggle a Server's Online status
+    */
     async function handleServer(name: string, status: boolean) {
+        toggleTarget = `${ status ? "Enabling" : "Disabling" } ${name}`;
+
         const req = await fetch('/dashboard', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -148,6 +156,7 @@
            error = "Error Occurred";
         }
 
+        toggleTarget = undefined;
         await invalidateAll();
         setTimeout(clearResult, 5000);
     }
@@ -189,6 +198,13 @@
     {/if}
     {#if warning}
         <div class="alert alert-warning">{warning}</div>
+    {/if}
+
+    {#if toggleTarget}
+        <div class="loading-state">
+            <LoadDial />
+            <span class="loading-label">{toggleTarget}</span>
+        </div>
     {/if}
 </div>
 
@@ -280,7 +296,7 @@
                 </div>
 
                 <div class="card-body">
-                    <h5 class="card-title">{server.name}</h5>
+                    <h5 class="card-title">{server.name} : {server.port}</h5>
 
                     {#if editingDesc === server.name}
                         <textarea

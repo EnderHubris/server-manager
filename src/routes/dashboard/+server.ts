@@ -9,6 +9,8 @@ import fs from 'fs/promises';
 import { join } from 'path';
 
 import { UploadIcon } from '$lib/operations/upload_file.js';
+import { startServer, stopServer, removeData } from '$lib/operations/instance_manager.js';
+import { backup_server } from '$lib/operations/update_server.js';
 
 async function deleteUser(username: string) : Promise<Response> {
     console.log(`[DELETION] Attempting to remove ${username}`);
@@ -32,6 +34,22 @@ async function deleteUser(username: string) : Promise<Response> {
 async function deleteServer(name: string) : Promise<Response> {
     console.log(`[DELETION] Attempting to remove server: ${name}`);
     try {
+        // stop active container in order to safely backup server files
+        if (!await stopServer(name)) {
+            return json({ success: false, error: 'Failed to stop server!' });
+        }
+
+        // backup server files
+        const backup_file = await backup_server(name);
+        if (!backup_file) {
+            return json({ success: false, error: 'Failed to backup server!' });
+        }
+
+        // delete server volume
+        if (!await removeData(name)) {
+            return json({ success: false, error: 'Failed to remove server volume!' });
+        }
+
         // remove icon file
         const [data] = await db.select({ icon: instances.icon })
                     .from(instances)
@@ -58,8 +76,10 @@ async function deleteServer(name: string) : Promise<Response> {
 async function toggleServer(name: string, o_status: boolean) {
     console.log(`[TOGGLE_SERVER] Attempting to ${ o_status ? "enable" : "disable" } server: ${name}`);
     try {
-        // @todo - tell system to shutdown the server
-
+        const docker_o_status = o_status ? await startServer(name) : await stopServer(name);
+        if (!docker_o_status){
+            return json({ success: false, error: `Error occurred toggling: ${name}` , status: 200 });
+        }
 
         // update instance online status in the DB
         const result = await db.update(instances)

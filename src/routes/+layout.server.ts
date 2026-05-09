@@ -6,21 +6,25 @@ export const load = async ({ cookies }) => {
     const sessionId = cookies.get('session_id');
     if (!sessionId) return;
 
-    const session = await db
-        .select()
-        .from(sessions)
-        .innerJoin(users, eq(sessions.uid, users.id))
-        .where(eq(sessions.id, sessionId))
-        .limit(1);
-
-    if (!session.length) return;
-
-    const user = {
-        name: session[0].users.username,
-        role: session[0].users.role,
-    };
-
-    console.log(`[USER] username: ${user.name} | role: ${user.role}`);
-
-    return { user };
+    try {
+        const session = await db
+            .select()
+            .from(sessions)
+            .innerJoin(users, eq(sessions.uid, users.id))
+            .where(eq(sessions.id, sessionId))
+            .limit(1);
+    
+        if (!session.length) return;
+        
+        const user = {
+            name: session[0].users.username,
+            role: session[0].users.role,
+        };
+    
+        console.log(`[USER] username: ${user.name} | role: ${user.role}`);
+    
+        return { user };
+    } catch (e) {
+        return { error: "Database Unreachable" };
+    }
 };

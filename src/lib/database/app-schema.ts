@@ -31,6 +31,7 @@ export const instances = mysqlTable("instances", {
   name:         varchar("name", { length: 24 }).notNull().unique(),
   description:  text("description").notNull().default(""),
   icon:         varchar('icon', { length: 64 }).notNull().default(""),
+  server_port:  varchar('server_port', { length: 16 }).notNull(),
   online:       boolean('online').default(true).notNull(),
   createdAt:    timestamp("created_at").defaultNow().notNull(),
 });

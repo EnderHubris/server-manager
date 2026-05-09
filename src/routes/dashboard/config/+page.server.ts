@@ -54,7 +54,7 @@ export const actions = {
                 if (key in conf_n) {
                     conf_n[key] = form_conf[key];
                     if (conf_n[key] === "undefined") {
-                        return { success: false, message: 'Invalid data' };
+                        return { success: false, error: 'Invalid data' };
                     }
                 }
             }
@@ -65,7 +65,7 @@ export const actions = {
             return { success: true, message: `Updated Server Folder!` }
         } catch (e) {
             console.error(`[ERROR] -- ${e}`);
-            return { success: false, message: 'An error occurred' };
+            return { success: false, error: 'An error occurred' };
         }
     },
 };

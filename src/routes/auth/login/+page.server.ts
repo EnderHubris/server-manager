@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, isRedirect } from '@sveltejs/kit';
 
 import { eq } from 'drizzle-orm';
 import { db } from '$lib/database/db';
@@ -11,15 +11,19 @@ export const load = async ({ cookies }) => {
     const sessionId = cookies.get('session_id');
     if (!sessionId) return;
 
-    const session = await db
+    try {
+        const session = await db
         .select()
         .from(sessions)
         .innerJoin(users, eq(sessions.uid, users.id))
         .where(eq(sessions.id, sessionId))
         .limit(1);
 
-    if (!session.length) return;
-    throw redirect(301, "/dashboard");
+        if (!session.length) return;
+        throw redirect(301, "/dashboard");
+    } catch (e) {
+        return { error: "Database Unreachable" };
+    }
 };
 
 export const actions = {
@@ -33,7 +37,6 @@ export const actions = {
             const password = formData.password;
 
             const pwdHash = await bcrypt.hash(password, 10);
-            console.log(`[*] Password Hash - ${pwdHash}`);
 
             const ip = getClientAddress();
 
@@ -66,7 +69,9 @@ export const actions = {
 
             throw redirect(301, "/dashboard");
         } catch (e) {
-            console.error(`[ERROR] -- ${e}`);
+            if (isRedirect(e)) throw e;
+
+            console.error("[ERROR] --", e);
             return { success: false, message: 'An error occurred' };
         }
     },

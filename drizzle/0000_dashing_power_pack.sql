@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `instances` (
 	`name` varchar(24) NOT NULL,
 	`description` text NOT NULL DEFAULT (''),
 	`icon` varchar(64) NOT NULL DEFAULT '',
+	`server_port` varchar(16) NOT NULL,
 	`online` boolean NOT NULL DEFAULT true,
 	`created_at` timestamp NOT NULL DEFAULT (now()),
 	CONSTRAINT `instances_id` PRIMARY KEY(`id`),

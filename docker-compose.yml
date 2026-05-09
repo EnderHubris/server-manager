@@ -38,7 +38,10 @@ services:
       - DB_PORT=3306
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_USER_PASSWORD}
+      - HOST_VOL=${HOST_VOL}
       - DB_DATABASE=management
+    group_add:
+      - "108" # docker GID
     build:
       context: .
       dockerfile: Dockerfile

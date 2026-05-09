@@ -16,6 +16,7 @@ export DB_USER=$DB_USER
 export DB_PASSWORD=$DB_PASSWORD
 export DB_DATABASE=management
 export CONF_FILE=/var/www/server_manager/serv.conf
+export HOST_VOL=$HOST_VOL
 export ORIGIN=http://localhost
 
 # start the node server

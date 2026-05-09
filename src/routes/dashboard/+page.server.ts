@@ -2,8 +2,8 @@ import { db } from '$lib/database/db';
 import { sessions, users, instances } from '$lib/database/app-schema';
 import { eq } from 'drizzle-orm';
 import { IsAuthenticated } from '$lib/database/auth';
+import { startServer, stopServer } from '$lib/operations/instance_manager.js';
 import { backup_server, install_server } from '$lib/operations/update_server.js';
-
 
 export const load = async ({ cookies }) => {
     const sessionId = cookies.get('session_id');
@@ -22,6 +22,7 @@ export const load = async ({ cookies }) => {
         // fetch server entries
         const servers = await db.select({
             name:           instances.name,
+            port:           instances.server_port,
             description:    instances.description,
             icon:           instances.icon,
             online:         instances.online,
@@ -33,14 +34,6 @@ export const load = async ({ cookies }) => {
         return;
     }
 };
-
-/**
- * Sleep for desired milli-seconds
- * 
- * @param ms 
- * @returns 
- */
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const actions = {
     // special form named-target
@@ -74,6 +67,10 @@ export const actions = {
 
             console.log(`[*] Archive Info -> ${server_software.name}`);
 
+            if (!await stopServer(server_name)){
+                return { success: false, error: 'Error Occurred shutting down server' };
+            }
+
             // backup the server
             const backup_file = await backup_server(server_name);
             if (!backup_file) {
@@ -86,6 +83,11 @@ export const actions = {
                 backup_file,
                 server_software
             );
+
+            // restart server post file-update
+            if (!await startServer(server_name)){
+                return { success: false, error: 'Error Occurred starting server' };
+            }
             
             if (successfully_updated) {
                 return { success: true, message: "Server Updated!" }
@@ -94,7 +96,7 @@ export const actions = {
             }
         } catch (e) {
             console.error(`[ERROR] -- ${e}`);
-            return { success: false, message: 'An error occurred' };
+            return { success: false, error: 'An error occurred' };
         }
     },
 };
