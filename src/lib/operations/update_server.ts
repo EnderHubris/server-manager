@@ -1,12 +1,10 @@
 import * as tar from 'tar'
-import unzipper from 'unzipper';
-
-import fs from 'fs/promises';
-import { createReadStream } from 'fs';
-
-import { basename, join } from 'path';
 
 import { fileExists, parseConf, type ConfigData } from '$lib/conf/config';
+import { unzip } from './file_handle';
+
+import fs from 'fs/promises';
+import { basename, join } from 'path';
 
 // List of files/folders to be preserved on updates
 const preserve_list = [
@@ -59,34 +57,6 @@ export async function backup_server(server_name: string): Promise<string|undefin
     } catch (e) {
         console.error("[-] Error:", e);
         return;
-    }
-}
-
-/**
- * Unzips a zip archive into a specific directory
- * 
- * @param zipPath 
- * @param outDir 
- */
-async function unzip(zipPath: string, outDir: string): Promise<boolean> {
-    if (!await fileExists(outDir)) {
-        console.error("[-] ZIP output directory does not exist!");
-        return false;
-    }
-
-    try {
-        await new Promise<void>((resolve, reject) => {
-            createReadStream(zipPath)
-                .pipe(unzipper.Extract({ path: outDir }))
-                .on('close', resolve)
-                .on('error', reject);
-        });
-
-        console.log(`[+] Extracted to: ${outDir}`);
-        return true;
-    } catch (e) {
-        console.error(`[-] Unzip failed: ${e}`);
-        return false;
     }
 }
 

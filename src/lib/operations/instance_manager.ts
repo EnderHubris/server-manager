@@ -7,6 +7,7 @@ import { instances } from '$lib/database/app-schema';
 
 import fs from 'fs/promises';
 import { statSync } from 'fs';
+import { env } from "$env/dynamic/private";
 
 const mc_bedrock_server = 'itzg/minecraft-bedrock-server';
 
@@ -196,13 +197,15 @@ export async function stopServer(name: string) {
 
 export async function createServer(name: string, port: number): Promise<boolean> {
     try {
-        if (!process.env.HOST_VOL) {
+        const HOST_VOL = process.env.HOST_VOL || env.HOST_VOL
+
+        if (!HOST_VOL) {
             console.error("[-] HOST_VOL undefined!");
             return false;
         }
 
         // abs path to server_root volume location on host
-        const hostDir = `${process.env.HOST_VOL}/${name}`;
+        const hostDir = `${HOST_VOL}/${name}`;
         console.log(`[BINDING] New Server Files -> ${hostDir}`);
 
         await ensureImage(mc_bedrock_server);
@@ -222,7 +225,7 @@ export async function createServer(name: string, port: number): Promise<boolean>
     
         await container.start();
 
-        // delay exec action to ensure successful start
+        // delay ensure successful start
         await sleep(2000);
 
         return true;

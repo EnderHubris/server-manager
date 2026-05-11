@@ -8,6 +8,9 @@
     import ServerForm from '$lib/components/server_form.svelte';
     let showCreateForm = $state(false);
 
+    import ImportForm from '$lib/components/import_form.svelte';
+    let showImportForm = $state(false);
+
     import { slide } from 'svelte/transition';
     import UpdateForm from '$lib/components/update_form.svelte';
     let showUpdateForm = $state(false);
@@ -44,6 +47,23 @@
         error = "";
     }
 
+    const handleArchive = (e: Event) => {
+        const input = e.target as HTMLInputElement;
+        const picked = Array.from(input.files ?? []);
+
+        const invalid = picked.filter(f => 
+            !f.name.endsWith('.tar.gz') && !f.name.endsWith('.zip')
+        );
+
+        if (invalid.length > 0) {
+            error = `Only TAR.GZ and ZIP archives are allowed: ${invalid.map(f => f.name).join(", ")}`;
+            input.value = "";
+            return;
+        }
+
+        error = "";
+    };
+
     let error = $state("");
     let warning = $state("");
     let success = $state("");
@@ -65,6 +85,8 @@
 
     async function removeServer(name: string) {
         if (window.confirm(`Are you sure you want to DELETE this server "${name}"?`)) {
+            toggleTarget = `Removing ${name}`;
+
             const req = await fetch('/dashboard', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -72,6 +94,8 @@
             });
 
             const response = await req.json();
+            toggleTarget = undefined;
+            
             if (response) {
                 console.log(response);
 
@@ -221,6 +245,7 @@
     <button class="collapse-toggle green" onclick={() => {
         showCreateForm = !showCreateForm;
         if (showUpdateForm) showUpdateForm = false;
+        if (showImportForm) showImportForm = false;
     }}>
         <span>Create Server</span>
         <svg
@@ -243,6 +268,38 @@
         >
             <ServerForm
                 handleIconInput={handleIconInput}
+                onSuccess={(msg) => { success = msg; setTimeout(clearResult, 5000); invalidateAll(); }}
+                onError={(msg) => { error = msg; setTimeout(clearResult, 5000); }}
+            />
+        </div>
+    {/if}
+
+    <button class="collapse-toggle blue" onclick={() => {
+        showImportForm = !showImportForm;
+        if (showUpdateForm) showUpdateForm = false;
+        if (showCreateForm) showCreateForm = false;
+    }}>
+        <span>Import Server</span>
+        <svg
+            width="16" height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            style="transform: rotate({showImportForm ? 180 : 0}deg); transition: transform 0.3s ease;"
+        >
+            <polyline points="4 6 8 10 12 6"/>
+        </svg>
+    </button>
+
+    {#if showImportForm}
+        <div
+            transition:slide={{ duration: 350 }}
+            class="collapse-wrapper"
+        >
+            <ImportForm
+                handleArchive={ handleArchive }
                 onSuccess={(msg) => { success = msg; setTimeout(clearResult, 5000); invalidateAll(); }}
                 onError={(msg) => { error = msg; setTimeout(clearResult, 5000); }}
             />
@@ -336,7 +393,7 @@
                     <button
                         onclick={ () => {
                             selectedServer = server.name;
-                            showCreateForm = false;
+                            showCreateForm = showImportForm = false;
                             showUpdateForm = true;
                         } }
                         class="btn btn-outline-primary btn-sm"

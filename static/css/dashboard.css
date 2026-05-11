@@ -187,6 +187,9 @@
 .collapse-toggle.green span {
     color:rgb(41, 197, 62);
 }
+.collapse-toggle.blue span {
+    color:rgb(64 192 223);
+}
 
 
 .card-img-wrapper {
@@ -313,4 +316,36 @@
 @keyframes pulse {
     0%, 100% { opacity: 0.4; }
     50%       { opacity: 1;   }
+}
+
+
+.info-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.info-btn:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.info-tree {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 0.75rem;
+    line-height: 1.8;
 }
