@@ -41,7 +41,7 @@ async function refreshServer(name: string) : Promise<Response> {
     try {
         // send a 2 minute warning about incoming restart
         if (!await signalRestart(name)) {
-
+            return json({ success: false, error: 'Error warning server, restart omitted' , status: 500 });
         }
 
         await restartServer(name);
