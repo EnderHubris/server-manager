@@ -1,7 +1,7 @@
 import * as tar from 'tar'
 
 import { fileExists, parseConf, type ConfigData } from '$lib/conf/config';
-import { unzip } from './file_handle';
+import { unzip, BACKUP_DIR } from './file_handle';
 
 import fs from 'fs/promises';
 import { basename, join } from 'path';
@@ -43,8 +43,10 @@ export async function backup_server(server_name: string): Promise<string|undefin
 
         const archive_date = `${dd}${mm}${yyyy}-${hh}${min}${ss}`;
         const archive_name = `${server_name}-${archive_date}-backup.tar.gz`;
-        const archive_file = join(conf.server_root, archive_name);
         
+        await fs.mkdir(BACKUP_DIR, { recursive: true });
+        const archive_file = join(BACKUP_DIR, archive_name);
+
         // create a new server backup
         await tar.create({
             gzip: true,

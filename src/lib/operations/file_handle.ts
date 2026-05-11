@@ -1,9 +1,11 @@
 import * as tar from 'tar'
 import unzipper from 'unzipper';
 
-import { dirname } from 'path';
+import { join } from 'path';
 import { createReadStream } from 'fs';
 import { fileExists } from '$lib/conf/config';
+
+export const BACKUP_DIR = join(process.cwd(), "backups");
 
 /**
  * Unzips a zip archive into a specific directory

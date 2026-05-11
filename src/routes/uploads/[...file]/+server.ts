@@ -19,7 +19,10 @@ export const GET = async ({ params }) => {
     try {
         const buffer = await readFile(join(process.cwd(), 'uploads', safeName));
         return new Response(buffer, {
-            headers: { 'Content-Type': mime }
+            headers: {
+                'Content-Type': mime,
+                'Content-Disposition': `attachment; filename="${safeName}"`
+             }
         });
     } catch {
         throw error(404, 'File not found');
