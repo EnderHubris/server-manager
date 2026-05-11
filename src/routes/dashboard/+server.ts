@@ -44,7 +44,9 @@ async function refreshServer(name: string) : Promise<Response> {
             return json({ success: false, error: 'Error warning server, restart omitted' , status: 500 });
         }
 
-        await restartServer(name);
+        if (!await restartServer(name)) {
+            return json({ success: true, message: `Error restarting server container` , status: 200 });
+        }
 
         console.log(`[RESTART] Restarted server: ${name}`);
         return json({ success: true, message: `${name} removed successfully!` , status: 200 });
