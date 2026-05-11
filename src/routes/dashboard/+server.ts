@@ -9,7 +9,12 @@ import fs from 'fs/promises';
 import { join } from 'path';
 
 import { UploadIcon } from '$lib/operations/upload_file.js';
-import { startServer, stopServer, removeData } from '$lib/operations/instance_manager.js';
+
+import {
+    startServer, stopServer, restartServer,
+    signalRestart, removeData
+} from '$lib/operations/instance_manager.js';
+
 import { backup_server } from '$lib/operations/update_server.js';
 
 async function deleteUser(username: string) : Promise<Response> {
@@ -26,6 +31,23 @@ async function deleteUser(username: string) : Promise<Response> {
 
         console.log(`[DELETION] Removed ${username}`);
         return json({ success: true, message: `${username} removed successfully!` , status: 200 });
+    } catch (e) {
+        return json({ success: false, error: 'Error Occurred' , status: 500 });
+    }
+}
+
+async function refreshServer(name: string) : Promise<Response> {
+    console.log(`[RESTART] Attempting to remove server: ${name}`);
+    try {
+        // send a 2 minute warning about incoming restart
+        if (!await signalRestart(name)) {
+
+        }
+
+        await restartServer(name);
+
+        console.log(`[RESTART] Restarted server: ${name}`);
+        return json({ success: true, message: `${name} removed successfully!` , status: 200 });
     } catch (e) {
         return json({ success: false, error: 'Error Occurred' , status: 500 });
     }
@@ -198,6 +220,12 @@ export const POST = async ( event ) => {
                 return json({ success: false, error: 'Invalid Data' , status: 400 });
 
             return await deleteServer(data.server_name);
+        } else if (action === "restart-server") {
+            // { action: 'delete-server', server_name }
+            if (!data.server_name)
+                return json({ success: false, error: 'Invalid Data' , status: 400 });
+
+            return await refreshServer(data.server_name);
         } else if (action === "toggle-server") {
             // { action: 'toggle-server', server_name, o_status }
             if (!data.server_name)

@@ -116,6 +116,39 @@
         }
     }
 
+    async function restartServer(name: string) {
+        if (window.confirm(`Are you sure you want to RESTART this server "${name}"?`)) {
+            toggleTarget = `Restarting ${name}`;
+
+            const req = await fetch('/dashboard', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'restart-server', server_name: name })
+            });
+
+            const response = await req.json();
+            toggleTarget = undefined;
+            
+            if (response) {
+                console.log(response);
+
+                if (response.success) {
+                    if (!response.warning)
+                        success = response.message;
+                    else
+                        warning = response.warning;
+                } else {
+                    error = response.error;
+                }
+            } else {
+               error = "Error Occurred";
+            }
+
+            await invalidateAll();
+            setTimeout(clearResult, 5000);
+        }
+    }
+
     let iconInput = $state<HTMLInputElement | null>(null);
     async function handleIconChange(e: Event, server_name: string) {
         const input = e.target as HTMLInputElement;
@@ -402,6 +435,10 @@
                         onclick={ () => { removeServer(server.name) } }
                         class="btn btn-outline-danger btn-sm"
                     >Delete</button>
+                    <button
+                        onclick={ () => { restartServer(server.name) } }
+                        class="btn btn-outline-warning btn-sm"
+                    >Restart</button>
                 </div>
             </div>
         </div>

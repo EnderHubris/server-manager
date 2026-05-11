@@ -217,9 +217,12 @@ export async function createServer(name: string, port: number): Promise<boolean>
                 'EULA=TRUE',
                 `LEVEL_NAME=${name}`,
             ],
+            OpenStdin: true,
+            Tty: true,
             HostConfig: {
                 PortBindings: { '19132/udp': [{ HostPort: `${port}` }] },
-                Binds: [`${hostDir}:/data`], // server container mounts to server folder stored on host | not a volume
+                // mounts /data into the hostDir, does not make a volume
+                Binds: [`${hostDir}:/data`],
             },
         });
     
@@ -227,6 +230,60 @@ export async function createServer(name: string, port: number): Promise<boolean>
 
         // delay ensure successful start
         await sleep(2000);
+
+        return true;
+    } catch (e) {
+        console.error("[-] Error:", e);
+        return false;
+    }
+}
+
+/**
+ * Send a given command to a given server
+ * 
+ * @param name 
+ * @param command 
+ */
+async function sendCommand(name: string, command: string): Promise<void> {
+    const container = docker.getContainer(name);
+
+    const stream = await container.attach({
+        stream: true,
+        stdin: true,
+        stdout: true,
+        stderr: false
+    });
+
+    stream.write(`${command}\n`);
+    stream.end();
+    console.log(`[+] Sent command to '${name}': ${command}`);
+}
+
+export async function signalRestart(name: string): Promise<boolean> {
+    try {
+        await sendCommand(name, 'say §eServer restarting in 60 seconds...');
+        await sleep(30000);
+
+        await sendCommand(name, 'say §eServer restarting in 30 seconds...');
+        await sleep(20000);
+
+        await sendCommand(name, 'say §cServer restarting in 10 seconds!');
+        await sleep(10000);
+        await sendCommand(name, 'say §4Restarting now!');
+
+        return true;
+    } catch (e) {
+        console.error("[-] Error:", e);
+        return false;
+    }
+}
+
+export async function restartServer(name: string): Promise<boolean> {
+    try {
+        const container = docker.getContainer(name);
+        
+        await container.restart();
+        await sleep(5000);
 
         return true;
     } catch (e) {
