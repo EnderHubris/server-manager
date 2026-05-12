@@ -11,8 +11,7 @@ RUN mkdir -p /app/local_storage
 RUN mkdir -p /var/www/project
 
 # give www-data docker group membership
-RUN groupadd -g 108 docker || true
-RUN usermod -aG docker www-data
+RUN groupadd -g ${DOCKER_GID} docker && usermod -aG docker www-data
 
 RUN chsh -s /bin/bash www-data
 
