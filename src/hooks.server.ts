@@ -16,7 +16,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     const origin = event.request.headers.get('origin');
 
     if (origin && !ALLOWED_ORIGINS.includes(origin)) {
-        return new Response('Forbidden', { status: 403 });
+        return new Response(`Forbidden, disallowed host: ${origin}`, { status: 403 });
     }
 
     return resolve(event);

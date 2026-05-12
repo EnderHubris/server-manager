@@ -17,7 +17,7 @@ export DB_PASSWORD=$DB_PASSWORD
 export DB_DATABASE=management
 export CONF_FILE=/var/www/server_manager/serv.conf
 export HOST_VOL=$HOST_VOL
-export APP_HOST=$(hostname -I | awk '{print $1}'):$APP_PORT
+export APP_HOST=$APP_HOST
 
 # start the node server
 node /var/www/server_manager
