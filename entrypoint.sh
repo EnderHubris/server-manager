@@ -4,6 +4,9 @@ set -e
 # give www-data docker group membership
 groupadd -g $DOCKER_GID docker && usermod -aG docker www-data
 
+# allow www-data and group to handle server files
+RUN chown -R www-data:www-data /app
+
 # Start supervisord in the background
 /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf &
 
