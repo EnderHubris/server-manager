@@ -1,3 +1,5 @@
+ARG DOCKER_GID
+
 FROM nginx:latest
 WORKDIR /
 RUN apt-get update && apt-get install -y supervisor sudo nodejs npm net-tools
