@@ -18,6 +18,7 @@ export DB_DATABASE=management
 export CONF_FILE=/var/www/server_manager/serv.conf
 export HOST_VOL=$HOST_VOL
 export APP_HOST=$APP_HOST
+export BODY_SIZE_LIMIT=Infinity
 
 # start the node server
 node /var/www/server_manager

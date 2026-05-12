@@ -4,6 +4,7 @@ import { createHash } from 'crypto';
 
 import { env } from "$env/dynamic/private";
 import { unzip, tarExtract } from './file_handle';
+import { parseConf, type ConfigData } from '$lib/conf/config';
 
 export interface ImportData {
     archive: File,
@@ -55,6 +56,12 @@ export async function ImportServer(data: ImportData): Promise<{success: boolean,
             return { success: false, name: ""};
         }
 
+        const conf: ConfigData = await parseConf();
+        if (!conf) {
+            console.error("[-] Error reading config file!");
+            return { success: false, name: ""};
+        }
+
         // save archive onto disk
         const archive_name = await UploadArchive(data.archive);
         const archive_path = join(process.cwd(), archive_name);
@@ -67,7 +74,9 @@ export async function ImportServer(data: ImportData): Promise<{success: boolean,
         const invalid = [data.archive].filter(f => 
             !f.name.endsWith('.tar.gz') && !f.name.endsWith('.zip')
         );
-        await mkdir(hostDir, { recursive: true });
+
+        // mkdir in docker context because we cannot necessarily write in the host
+        await mkdir(`${conf.server_root}/${level_name}`, { recursive: true });
 
         // decompress based on type
         if (data.archive.name.endsWith('.tar.gz')) {
