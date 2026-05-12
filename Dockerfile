@@ -3,9 +3,12 @@ WORKDIR /
 RUN apt-get update && apt-get install -y supervisor sudo nodejs npm net-tools
 
 # initial file system preperation
+RUN mkdir -p /var/www/server_manager/tmp_archives
 RUN mkdir -p /var/www/server_manager/uploads
-RUN mkdir -p /var/www/project
+RUN mkdir -p /var/www/server_manager/backups
+
 RUN mkdir -p /app/local_storage
+RUN mkdir -p /var/www/project
 
 # give www-data docker group membership
 RUN groupadd -g 108 docker || true
@@ -22,8 +25,8 @@ COPY svelte.config.js tsconfig.json vite.config.ts build_svelte.sh /var/www/proj
 # prep build handler and build NGINX production files
 RUN chown -R www-data:www-data /var/www
 
-# allow www-data to write backup tar.gz files
-RUN chown -R www-data /app/local_storage
+# allow www-data and group to handle server files
+RUN chown -R www-data:www-data /app/
 
 # allow www-data group members to manipulate web-files
 RUN chmod -R 775 /var/www

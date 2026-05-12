@@ -6,6 +6,9 @@ I created the asset images through MS-Paint, I figured a bad simple logo would
 be nice to add more graphic content to the pages.
 
 ## Notice
+This application was not intented to be used over public internet, web vulnerabilities are
+very easy to introduce and patching all vectors is near impossible as code is never secure.
+
 The default credential is `admin:admin`, if you plan to allow access to this interface
 over public internet, it is `EXTREMELY` recommended that you change the default password
 to a secure and strong passphrase avoid incidents.
@@ -18,7 +21,7 @@ sudo usermod -aG www-data USER
 ```
 Starting the app container, always use strong credentials.
 ```console
-HOST_VOL="$(pwd)/local_storage" DB_USER_PASSWORD='' DB_USER='' docker compose -p server_manager up --build -d
+HOST_VOL="$(pwd)/local_storage" DB_USER_PASSWORD='' DB_USER='' APP_PORT=3000 docker compose -p server_manager up --build -d
 ```
 
 ## Developer Section
