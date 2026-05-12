@@ -6,7 +6,10 @@ const config = {
     kit: {
         adapter: adapter({
             out: 'build'
-        })
+        }),
+        csrf: {
+            checkOrigin: false
+        }
     }
 };
 
