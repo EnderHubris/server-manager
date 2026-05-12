@@ -9,7 +9,7 @@ import type { Handle } from '@sveltejs/kit';
 
 const ALLOWED_ORIGINS = [
     'http://localhost',
-    `http://${process.env.LOCAL_IP}`
+    `http://${process.env.APP_HOST}`
 ];
 
 export const handle: Handle = async ({ event, resolve }) => {
