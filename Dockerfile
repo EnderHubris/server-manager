@@ -28,6 +28,9 @@ RUN chown -R www-data:www-data /var/www
 # allow www-data and group to handle server files
 RUN chown -R www-data:www-data /app/
 
+# allow docker group on the container to hit the docker.sock
+RUN chown root:docker /var/run/docker.sock
+
 # allow www-data group members to manipulate web-files
 RUN chmod -R 775 /var/www
 RUN chmod +x /var/www/project/build_svelte.sh
