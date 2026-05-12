@@ -41,8 +41,7 @@ services:
       - HOST_VOL=${HOST_VOL}
       - DB_DATABASE=management
       - APP_HOST=${APP_HOST}
-    args:
-        DOCKER_GID: ${DOCKER_GID}
+      - DOCKER_GID=${DOCKER_GID}
     group_add:
       - "${DOCKER_GID}" # docker GID
     build:

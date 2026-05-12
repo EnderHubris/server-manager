@@ -1,5 +1,3 @@
-ARG DOCKER_GID
-
 FROM nginx:latest
 WORKDIR /
 RUN apt-get update && apt-get install -y supervisor sudo nodejs npm net-tools
@@ -11,9 +9,6 @@ RUN mkdir -p /var/www/server_manager/backups
 
 RUN mkdir -p /app/local_storage
 RUN mkdir -p /var/www/project
-
-# give www-data docker group membership
-RUN groupadd -g ${DOCKER_GID} docker && usermod -aG docker www-data
 
 RUN chsh -s /bin/bash www-data
 
