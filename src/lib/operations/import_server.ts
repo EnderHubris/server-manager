@@ -67,8 +67,9 @@ export async function ImportServer(data: ImportData): Promise<{success: boolean,
         const archive_path = join(process.cwd(), archive_name);
 
         // abs path to server_root volume location on host
-        const hostDir = `${HOST_VOL}/${level_name}`;
-        console.log(`[*] Importing files: ${hostDir}`);
+        // const hostDir = `${HOST_VOL}/${level_name}`;
+        const serverDest = `${conf.server_root}/${level_name}`;
+        console.log(`[*] Importing files: ${serverDest}`);
         
         // creating folder to decompress archive into if we have a valid archive type
         const invalid = [data.archive].filter(f => 
@@ -76,17 +77,17 @@ export async function ImportServer(data: ImportData): Promise<{success: boolean,
         );
 
         // mkdir in docker context because we cannot necessarily write in the host
-        await mkdir(`${conf.server_root}/${level_name}`, { recursive: true });
+        await mkdir(serverDest, { recursive: true });
 
         // decompress based on type
         if (data.archive.name.endsWith('.tar.gz')) {
             console.log("[*] Extracting archive | tar.gz")
-            if (!await tarExtract(archive_path, hostDir)) {
+            if (!await tarExtract(archive_path, serverDest)) {
                 return { success: false, name: ""};
             }
         } else if (data.archive.name.endsWith('.zip')) {
             console.log("[*] Extracting archive | zip")
-            if (!await unzip(archive_path, hostDir)) {
+            if (!await unzip(archive_path, serverDest)) {
                 return { success: false, name: ""};
             }
         } else {
