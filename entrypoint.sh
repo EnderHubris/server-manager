@@ -2,7 +2,7 @@
 set -e
 
 # give www-data docker group membership
-RUN groupadd -g $DOCKER_GID docker && usermod -aG docker www-data
+groupadd -g $DOCKER_GID docker && usermod -aG docker www-data
 
 # Start supervisord in the background
 /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf &
