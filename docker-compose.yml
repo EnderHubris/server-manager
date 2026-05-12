@@ -42,7 +42,7 @@ services:
       - DB_DATABASE=management
       - APP_HOST=${APP_HOST}
     group_add:
-      - "108" # docker GID
+      - "${DOCKER_GID}" # docker GID
     build:
       context: .
       dockerfile: Dockerfile

@@ -21,7 +21,7 @@ sudo usermod -aG www-data USER
 ```
 Starting the app container, always use strong credentials.
 ```console
-HOST_VOL="$(pwd)/local_storage" DB_USER_PASSWORD='' DB_USER='' APP_HOST="$(hostname -I | awk '{print $1}')" APP_PORT=3000 docker compose -p server_manager up --build -d
+HOST_VOL="$(pwd)/local_storage" DOCKER_GID="$(getent group docker | awk -F: '{print $3}')" DB_USER_PASSWORD='' DB_USER='' APP_HOST="$(hostname -I | awk '{print $1}')" APP_PORT=3000 docker compose -p server_manager up --build -d
 ```
 
 ## Developer Section
