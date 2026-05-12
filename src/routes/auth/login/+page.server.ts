@@ -62,7 +62,7 @@ export const actions = {
             cookies.set('session_id', sessionId, {
                 path: '/',
                 httpOnly: true, // prevent XSS
-                secure: true,
+                secure: false,  // site is not using https
                 sameSite: 'lax',
                 maxAge: 60 * 60 * 24 * 30   // 30 days
             });
